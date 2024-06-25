@@ -14,10 +14,7 @@ export enum ActivityType {
 export class Log {
   @PrimaryGeneratedColumn() id: number;
 
-  @Column({ type: 'int' }) vol_id: number;
-
-  //@Column({ type: 'date', nullable: false }) Date: Date;
-  @ManyToOne(() => DailyLog, (daily) => daily.timePeriod)
+  @ManyToOne(() => DailyLog, (daily) => daily.Logs)
   Date: DailyLog;
   @Column({
     type: 'enum',
@@ -25,10 +22,14 @@ export class Log {
   })
   activity: ActivityType;
 
-  @Column({ type: 'varchar', nullable: true, length: 2550 }) other: string;
+  @Column({ type: 'varchar', nullable: true, length: 2550 }) details: string;
 
-  @Column({ type: 'time' })
-  start: string;
+  @Column({ type: 'string', length: 256 })
+  hourStart: string;
 
-  @Column({ type: 'time' }) end: string;
+  @Column({ type: 'string', length: 256 }) minStart: string;
+
+  @Column({ type: 'string', length: 256 }) hourEnd: string;
+
+  @Column({ type: 'string', length: 256 }) minEnd: string;
 }

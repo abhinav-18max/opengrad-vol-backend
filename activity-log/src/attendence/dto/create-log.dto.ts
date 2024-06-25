@@ -1,21 +1,29 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ActivityType } from '../entities/log.entity';
 
 export class CreateLogDto {
-  @IsNotEmpty()
-  @IsNumber()
-  vol_id: number;
-  @IsNotEmpty()
   @IsEnum(ActivityType)
+  @IsNotEmpty()
   activity: ActivityType;
   @IsNotEmpty()
   @IsString()
-  @IsNotEmpty()
-  start: string;
-  @IsNotEmpty()
-  @IsString()
-  end: string;
+  hourStart: string;
   @IsNotEmpty()
   @IsString()
-  other: string;
+  minStart: string;
+  @IsNotEmpty()
+  @IsString()
+  hourEnd: string;
+  @IsNotEmpty()
+  @IsString()
+  minEnd: string;
+  @IsString()
+  @IsOptional()
+  details: string;
 }

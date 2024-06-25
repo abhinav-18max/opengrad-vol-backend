@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FeedbackItem } from './entities/feedbackitem.entity';
 import { Repository } from 'typeorm';
-import { Feedback } from './entities/feedback.entity';
+import { Feedback, FeedbackType } from './entities/feedback.entity';
 import { CreateFeedbackDto } from './dto/createFeedback.dto';
 
 @Injectable()
@@ -40,7 +40,11 @@ export class FormsService {
   async getfeedBackForm(id: number, cohortId: number, pocId: number) {
     try {
       const feedBackForm1 = await this.feedbackRepository.findOne({
-        where: { id: id, recipientId: cohortId, recipientType:'cohort' },
+        where: {
+          id: id,
+          recipientId: cohortId,
+          recipientType: FeedbackType.COHORT,
+        },
         relations: {
           feedbackItems: true,
         },
@@ -49,7 +53,7 @@ export class FormsService {
         return feedBackForm1;
       }
       const feedBackForm2 = await this.feedbackRepository.findOne({
-        where: { id: id, recipientId: pocId, recipientType:'poc' },
+        where: { id: id, recipientId: pocId, recipientType: FeedbackType.POC },
         relations: {
           feedbackItems: true,
         },

@@ -7,8 +7,8 @@ export class DailyLog {
 
   @Column({ type: 'int' }) vol_id: number;
 
-  @Column({ type: 'date', nullable: false }) Date: string;
+  @Column({ type: 'date', nullable: false }) Date: Date;
 
   @OneToMany(() => Log, (timely) => timely.Date)
-  timePeriod: Log[];
+  Logs: Log[];
 }
