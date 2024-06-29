@@ -37,6 +37,7 @@
         "connect-redis": "^7.1.0",
         "connect-typeorm": "^2.0.0",
         "express-session": "^1.17.3",
+        "nats": "^2.27.0",
         "nodemon": "^3.0.1",
         "passport": "^0.6.0",
         "passport-jwt": "^4.0.1",

@@ -1,11 +1,11 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, ManyToOne, PrimaryGeneratedColumn, Entity } from 'typeorm';
 import { Feedback } from './feedback.entity';
 
 export enum FeedbackItemType {
   DESCRIPTIVE = 'descriptive',
   'MULTIPLECHOICE' = 'multiplechoice',
 }
-
+@Entity({ name: 'FeedbackItem' })
 export class FeedbackItem {
   @PrimaryGeneratedColumn() id: number;
   @Column({ type: 'enum', enum: FeedbackItemType })

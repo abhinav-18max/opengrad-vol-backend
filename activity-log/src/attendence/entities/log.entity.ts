@@ -10,7 +10,7 @@ export enum ActivityType {
   'Other' = 'Other',
 }
 
-@Entity({ name: 'logs' })
+@Entity({ name: 'Log' })
 export class Log {
   @PrimaryGeneratedColumn() id: number;
 

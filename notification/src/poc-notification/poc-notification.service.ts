@@ -7,7 +7,7 @@ import { PocNotification } from './entities/pocNotification.entities';
 @Injectable()
 export class PocNotificationService {
   constructor(
-    @InjectRepository(PocNotificationService)
+    @InjectRepository(PocNotification)
     private pocNotificationRepository: Repository<PocNotification>,
   ) {}
 
@@ -15,11 +15,7 @@ export class PocNotificationService {
     createPocNotificationDto: CreatePocNotificationDto,
   ) {
     try {
-      for (
-        let i = 0;
-        i < createPocNotificationDto.receipient_id.length;
-        i++
-      ) {
+      for (let i = 0; i < createPocNotificationDto.receipient_id.length; i++) {
         const pocNotification = new PocNotification();
         pocNotification.form_id = createPocNotificationDto.form_id;
         pocNotification.typeofnotification =

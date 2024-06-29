@@ -4,7 +4,7 @@ export enum CohortNotificationType {
   Message = 'message',
   Form = 'form',
 }
-@Entity({ name: 'cohortNotification' })
+@Entity({ name: 'CohortNotification' })
 export class CohortNotification {
   @PrimaryGeneratedColumn() id: number;
   @Column({ type: 'enum', enum: CohortNotificationType })

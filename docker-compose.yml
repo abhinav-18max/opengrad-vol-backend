@@ -1,28 +1,56 @@
 services:
   auth-gateway:
     build: auth-gateway
+    command: pnpm run start:prod
     ports:
       - "3000:3000"
-    volumes:
-      -  ./auth-gateway/src:/usr/src/app/src
-    command: pnpm run start:prod
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - opengrad
   activity-log:
     build: activity-log
-    volumes:
-      -  ./activity-log/src:/usr/src/app/src
     command: pnpm run start:prod
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - opengrad
   forms:
     build: forms
-    volumes:
-      -  ./forms/src:/usr/src/app/src
     command: pnpm run start:prod
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - opengrad
   notification:
     build: notification
-    volumes:
-      - ./notification/src:/usr/src/app/src
     command: pnpm run start:prod
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - opengrad
   nats:
     image: nats:latest
     ports:
       - "4222:4222"
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+networks:
+  opengrad:
+    driver: bridge
 

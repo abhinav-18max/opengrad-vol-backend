@@ -1,4 +1,4 @@
-import { Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { FeedbackItem } from './feedbackitem.entity';
 
 export enum FeedbackType {
@@ -6,6 +6,7 @@ export enum FeedbackType {
   POC = 'poc',
 }
 
+@Entity({ name: 'Feedback' })
 export class Feedback {
   @PrimaryGeneratedColumn() id: number;
   @Column({ type: 'enum', enum: FeedbackType }) recipientType: FeedbackType;

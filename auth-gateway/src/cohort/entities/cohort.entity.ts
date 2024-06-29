@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PocRelation } from '../../user/entities/poc.entity';
-import { JoinTable } from 'typeorm/browser';
+import { JoinTable } from 'typeorm';
 import { VolRelation } from '../../user/entities/vol.entity';
 
 @Entity({ name: 'Cohort' })
@@ -21,4 +21,4 @@ export class Cohort {
   @ManyToOne(() => VolRelation)
   @JoinTable()
   vol: VolRelation[];
-};
+}

@@ -216,16 +216,16 @@ export class UserService {
   }
   async assignVoltoCohort(assignVolDto: AssignVolDto) {
     try {
-      const res1 = this.volRepository.findOne({
+      const res1 = await this.volRepository.findOne({
         where: { id: assignVolDto.volRelationId },
       });
-      const res2 = this.cohortRepository.findOne({
+      const res2 = await this.cohortRepository.findOne({
         where: { id: assignVolDto.cohortId },
         relations: {
           vol: true,
         },
       });
-      res2.vol.append
+      res2.vol.push(res1);
       return await this.cohortRepository.save(res2 as any);
     } catch (err) {
       console.log(err);
