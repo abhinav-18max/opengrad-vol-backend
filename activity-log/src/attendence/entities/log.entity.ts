@@ -24,12 +24,12 @@ export class Log {
 
   @Column({ type: 'varchar', nullable: true, length: 2550 }) details: string;
 
-  @Column({ type: 'string', length: 256 })
+  @Column({ type: 'varchar', length: 256 })
   hourStart: string;
 
-  @Column({ type: 'string', length: 256 }) minStart: string;
+  @Column({ type: 'varchar', length: 256 }) minStart: string;
 
-  @Column({ type: 'string', length: 256 }) hourEnd: string;
+  @Column({ type: 'varchar', length: 256 }) hourEnd: string;
 
-  @Column({ type: 'string', length: 256 }) minEnd: string;
+  @Column({ type: 'varchar', length: 256 }) minEnd: string;
 }

@@ -41,10 +41,14 @@ services:
     image: nats:latest
     ports:
       - "4222:4222"
+    networks:
+      - opengrad
   postgres:
     image: postgres:latest
     ports:
       - "5432:5432"
+    networks:
+      - opengrad
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
