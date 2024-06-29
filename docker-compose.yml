@@ -10,6 +10,15 @@ services:
       - .env
     networks:
       - opengrad
+    develop:
+      watch:
+        - action: sync
+          path: ./auth-gateway
+          target: /app/authgateway
+          ignore:
+            - ./authgateway/node_modules/
+        - action: rebuild
+          path: ./authgateway/package.json
   activity-log:
     build: activity-log
     command: pnpm run start:prod
@@ -19,6 +28,15 @@ services:
       - .env
     networks:
       - opengrad
+    develop:
+      watch:
+        - action: sync
+          path: ./activity-log
+          target: /app/activitylog
+          ignore:
+            - ./activitylog/node_modules/
+        - action: rebuild
+          path: ./activitylog/package.json   
   forms:
     build: forms
     command: pnpm run start:prod
@@ -28,6 +46,15 @@ services:
       - .env
     networks:
       - opengrad
+    develop:
+      watch:
+        - action: sync
+          path: ./forms
+          target: /app/forms
+          ignore:
+            - ./forms/node_modules/
+        - action: rebuild
+          path: ./forms/package.json
   notification:
     build: notification
     command: pnpm run start:prod
@@ -37,6 +64,15 @@ services:
       - .env
     networks:
       - opengrad
+    develop:
+      watch:
+        - action: sync
+          path: ./notification
+          target: /app/notification
+          ignore:
+            - ./notification/node_modules/
+        - action: rebuild
+          path: ./notification/package.json
   nats:
     image: nats:latest
     ports:
