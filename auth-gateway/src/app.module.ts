@@ -9,6 +9,9 @@ import { ConfigModule } from '@nestjs/config';
 import { CohortModule } from './cohort/cohort.module';
 import { StudentsModule } from './students/students.module';
 import { NatsClientModule } from './nats-client/nats-client.module';
+import { ActivityLogModule } from './activity-log/activity-log.module';
+import { FormsModule } from './forms/forms.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { NatsClientModule } from './nats-client/nats-client.module';
     UserModule,
     CohortModule,
     StudentsModule,
+    ActivityLogModule,
+    FormsModule,
+    NotificationModule,
   ],
   controllers: [],
   providers: [],
