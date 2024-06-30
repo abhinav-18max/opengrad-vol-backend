@@ -11,4 +11,7 @@ export class DailyLog {
 
   @OneToMany(() => Log, (timely) => timely.Date)
   Logs: Log[];
+
+  @Column({ type: 'boolean', nullable: true, default: false })
+  isPocVerified: boolean;
 }

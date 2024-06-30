@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param } from '@nestjs/common';
 import { CohortService } from './cohort.service';
 import { CreateCohortDto } from './dto/create-cohort.dto';
 
@@ -12,5 +12,17 @@ export class CohortController {
       return { message: 'Cohort already exists' };
     }
     return await this.cohortService.create(createCohortDto);
+  }
+  @Get('all')
+  async getAll() {
+    return await this.cohortService.getAll();
+  }
+  @Get('poc/:id')
+  async findByPoc(@Param('id') id: number) {
+    return await this.cohortService.findByPoc(id);
+  }
+  @Get('vol/:id')
+  async findByVol(@Param('id') id: number) {
+    return await this.cohortService.findByVol(id);
   }
 }

@@ -47,4 +47,13 @@ export class AttendenceService {
       },
     });
   }
+  async isPocverified(id: number) {
+    const log = await this.dailyLogRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    log.isPocVerified = true;
+    return await this.dailyLogRepository.save(log);
+  }
 }

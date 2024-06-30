@@ -11,7 +11,7 @@ export class PocNotificationService {
     private pocNotificationRepository: Repository<PocNotification>,
   ) {}
 
-  async createCohortNotification(
+  async createPocNotification(
     createPocNotificationDto: CreatePocNotificationDto,
   ) {
     try {
@@ -30,7 +30,7 @@ export class PocNotificationService {
       return error;
     }
   }
-  async searchCohortNotification(id: number) {
+  async searchPocNotification(id: number) {
     try {
       const pocNotification = await this.pocNotificationRepository.find({
         where: {

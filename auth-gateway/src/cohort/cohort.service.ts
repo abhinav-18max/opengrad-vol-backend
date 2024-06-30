@@ -43,4 +43,21 @@ export class CohortService {
       where: { name: name },
     });
   }
+  async getAll() {
+    return await this.cohortRepository.find();
+  }
+  async findByPoc(id: number) {
+    return await this.cohortRepository
+      .createQueryBuilder('cohort')
+      .leftJoinAndSelect('cohort.poc', 'poc')
+      .where('poc.id = :id', { id: id })
+      .getMany();
+  }
+  async findByVol(id: number) {
+    return await this.cohortRepository
+      .createQueryBuilder('cohort')
+      .leftJoinAndSelect('cohort.vol', 'vol')
+      .where('vol.id = :id', { id: id })
+      .getMany();
+  }
 }
