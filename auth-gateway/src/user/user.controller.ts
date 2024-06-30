@@ -6,7 +6,8 @@ import {
   Get,
   Inject,
   Param,
-  Post, Req,
+  Post,
+  Req,
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -15,7 +16,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InvitePocDto } from './dto/invite-poc.dto';
 import { InviteVolDto } from './dto/invite-vol.dto';
 import { MagicloginStrategy } from '../auth/passport/magiclogin.strategy';
-import {AssignVolDto} from "./dto/assign-vol.dto";
+import { AssignVolDto } from './dto/assign-vol.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,10 +34,6 @@ export class UserController {
       await this.userService.create(createUserDto);
       return res.status(200).json({ message: 'User created' });
     }
-  }
-  @Post('assign-vol')
-  async assignVol(@Body() assignVolDto:AssignVolDto, @Res() res: Response) {
-
   }
 
   @Get() findAll() {
@@ -62,5 +59,10 @@ export class UserController {
   @Post('volinvite')
   createvolinvite(@Body() invitevolDto: InviteVolDto) {
     return this.userService.createVolInvite(invitevolDto);
+  }
+
+  @Post('assignvol')
+  assignVol(@Body() assignVolDto: AssignVolDto) {
+    return this.userService.assignVoltoCohort(assignVolDto);
   }
 }

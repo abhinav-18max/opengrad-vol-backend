@@ -208,7 +208,7 @@ export class UserService {
 
     const res2 = await this.pocRepository.findOne({
       where: { id: det.Poc },
-      relations: ['vol'],
+      relations: ['vols'],
     });
     res2.vols.push(res3);
     await this.pocRepository.save(res2);
@@ -225,6 +225,7 @@ export class UserService {
           vol: true,
         },
       });
+      console.log(res2);
       res2.vol.push(res1);
       return await this.cohortRepository.save(res2 as any);
     } catch (err) {

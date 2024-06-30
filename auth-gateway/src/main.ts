@@ -11,7 +11,7 @@ async function bootstrap() {
   if (Appdatasource.isInitialized === false) await Appdatasource.initialize();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true,
   });
   const sessionrepository = Appdatasource.getRepository(SessionEntity);
@@ -28,7 +28,9 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(5001);
+  await app.listen(5001, '0.0.0.0', () => {
+    console.log('Auth Gateway is running on port 5001');
+  });
 }
 
 bootstrap();

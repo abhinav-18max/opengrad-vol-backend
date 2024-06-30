@@ -64,13 +64,19 @@ export class AuthController {
   @UseGuards(AuthGuard('magiclogin'))
   @Post('login/callback')
   async callback(@Req() req, @Body() passwordSetDto: PasswordSetDto) {
+    console.log(req.user);
     if (req.user.spec === 'invite-poc') {
-      console.log(req.user);
       const res = await this.userService.createUserPoc(
         req.user.email,
         passwordSetDto,
       );
-      console.log(res);
+      return res;
+    } else if (req.user.spec === 'invite-vol') {
+      const res = await this.userService.createUserVol(
+        req.user.email,
+        passwordSetDto,
+      );
+      return res;
     }
   }
 }

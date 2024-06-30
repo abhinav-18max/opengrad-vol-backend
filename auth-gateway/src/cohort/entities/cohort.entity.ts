@@ -18,7 +18,7 @@ export class Cohort {
   @ManyToMany(() => PocRelation)
   @JoinTable()
   poc: PocRelation[];
-  @ManyToOne(() => VolRelation)
+  @ManyToMany(() => VolRelation)
   @JoinTable()
   vol: VolRelation[];
 }

@@ -16,23 +16,30 @@ export class StudentsService {
     student.phone = createStudentDto.phone;
     student.volId = createStudentDto.volId;
     student.cohortId = createStudentDto.cohortId;
-    return this.studentRepository.save(student);
+    return await this.studentRepository.save(student);
   }
   async findAll() {
     return this.studentRepository.find();
   }
   async findOne(id: number) {
-    return this.studentRepository.findOne({
+    return await this.studentRepository.findOne({
       where: {
         id: id,
       },
     });
   }
   async findByVolId(volId: number, cohortId: number) {
-    return this.studentRepository.find({
+    return await this.studentRepository.find({
       where: {
         volId: volId,
         cohortId: cohortId,
+      },
+    });
+  }
+  async findByEmail(email: string) {
+    return await this.studentRepository.findOne({
+      where: {
+        email: email,
       },
     });
   }

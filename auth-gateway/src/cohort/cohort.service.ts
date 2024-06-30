@@ -19,14 +19,16 @@ export class CohortService {
       cohort.startDate = createCohortDto.startDate;
       cohort.endDate = createCohortDto.endDate;
 
-      const pocs: PocRelation[] = [];
-      createCohortDto.poc.map(async (p) => {
-        pocs.push(
-          await this.pocRelation.findOne({
-            where: { id: p },
-          }),
-        );
-      });
+      const pocs = [];
+      for (let i = 0; i < createCohortDto.poc.length; i++) {
+        const poc = await this.pocRelation.findOne({
+          where: {
+            id: createCohortDto.poc[i],
+          },
+        });
+        pocs.push(poc);
+        console.log(poc);
+      }
       cohort.poc = pocs;
 
       return await this.cohortRepository.save(cohort);
@@ -34,5 +36,11 @@ export class CohortService {
       console.log(err);
       return err;
     }
+  }
+  async findByName(name: string) {
+    return await this.cohortRepository.findOne({
+      select: ['name'],
+      where: { name: name },
+    });
   }
 }

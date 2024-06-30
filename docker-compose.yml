@@ -3,7 +3,7 @@ services:
     build: auth-gateway
     command: pnpm run start:prod
     ports:
-      - "3000:3000"
+      - "5001:5001"
     depends_on:
       - postgres
     env_file:

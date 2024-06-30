@@ -1,11 +1,15 @@
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { Generated } from 'typeorm';
+import { Role } from '../../auth/roles.enum';
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 export class CreateUserDto {
-  @Generated()
-  id: string;
-
   @IsString()
   @IsNotEmpty({
     message: 'Name is required',
@@ -30,9 +34,9 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsString()
+  @IsEnum(Role)
   @IsNotEmpty({
     message: 'Role is required',
   })
-  role: string;
+  role: Role;
 }

@@ -8,6 +8,9 @@ export class CohortController {
 
   @Post('create')
   async create(@Body() createCohortDto: CreateCohortDto) {
-    await this.cohortService.create(createCohortDto);
+    if (await this.cohortService.findByName(createCohortDto.name)) {
+      return { message: 'Cohort already exists' };
+    }
+    return await this.cohortService.create(createCohortDto);
   }
 }
