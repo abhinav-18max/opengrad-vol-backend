@@ -44,30 +44,16 @@ export class FormsService {
       return error;
     }
   }
-  async getfeedBackForm(id: number, cohortId: number, pocId: number) {
+  async getfeedBackForm(id: number) {
     try {
-      const feedBackForm1 = await this.feedbackRepository.findOne({
+      return await this.feedbackRepository.findOne({
         where: {
           id: id,
-          recipientId: cohortId,
-          recipientType: FeedbackType.COHORT,
         },
         relations: {
           feedbackItems: true,
         },
       });
-      if (feedBackForm1) {
-        return feedBackForm1;
-      }
-      const feedBackForm2 = await this.feedbackRepository.findOne({
-        where: { id: id, recipientId: pocId, recipientType: FeedbackType.POC },
-        relations: {
-          feedbackItems: true,
-        },
-      });
-      if (feedBackForm2) {
-        return feedBackForm2;
-      }
     } catch (error) {
       console.log(error);
       return error;

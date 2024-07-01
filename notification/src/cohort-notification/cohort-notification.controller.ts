@@ -1,23 +1,23 @@
 import { CohortNotificationService } from './cohort-notification.service';
 import { Controller } from '@nestjs/common';
-import { Post, Body, Param, Get } from '@nestjs/common';
 import { CreateCohortNotificationDto } from './dto/createCohortNotification.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('cohort-notification')
 export class CohortNotificationController {
   constructor(
     private readonly cohortnotificationservice: CohortNotificationService,
   ) {}
-  @Post('create')
+  @MessagePattern({ cmd: 'createCohortNotification' })
   async create(
-    @Body() createCohortNotificationDto: CreateCohortNotificationDto,
+    @Payload() createCohortNotificationDto: CreateCohortNotificationDto,
   ) {
     return await this.cohortnotificationservice.createCohortNotification(
       createCohortNotificationDto,
     );
   }
-  @Get('search/:id')
-  async search(@Param('id') id: number) {
+  @MessagePattern({ cmd: 'getCohortNotification' })
+  async search(@Payload() id: number) {
     return await this.cohortnotificationservice.searchCohortNotification(id);
   }
 }
