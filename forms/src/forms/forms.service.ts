@@ -89,7 +89,7 @@ export class FormsService {
         feedbackitemresponse.feedbackitem_id =
           createFeedbackResponse.feedbackitemResponses[i].feedbackitem_id;
         feedbackitemresponse.item_type =
-          createFeedbackResponse.feedbackitemResponses[i].item_tye;
+          createFeedbackResponse.feedbackitemResponses[i].item_type;
         feedbackitemresponse.option_ans =
           createFeedbackResponse.feedbackitemResponses[i].option_ans;
         feedbackitemresponse.descr_ans =

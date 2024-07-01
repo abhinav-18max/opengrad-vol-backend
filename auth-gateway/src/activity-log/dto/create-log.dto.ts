@@ -1,5 +1,12 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { ActivityType } from '../entities/log.entity';
+export enum ActivityType {
+  'Content Creation' = 'Content Creation',
+  'Mentoring' = 'Mentoring',
+  'Design/Marketing' = 'Marketing',
+  'Tech' = 'Tech',
+  'Offline Outreach' = 'Offline Outreach',
+  'Other' = 'Other',
+}
 
 export class CreateLogDto {
   @IsEnum(ActivityType)

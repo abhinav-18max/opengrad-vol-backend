@@ -1,21 +1,21 @@
 import { AttendenceService } from './attendence.service';
 import { Controller } from '@nestjs/common';
-import { Post, Body, Param, Get } from '@nestjs/common';
 import { CreateDailyLogDto } from './dto/create-dailylog.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('attendence')
 export class AttendenceController {
   constructor(private readonly attendenceService: AttendenceService) {}
-  @Post('create')
-  async createLog(@Body() createLog: CreateDailyLogDto) {
+  @MessagePattern({ cmd: 'createLog' })
+  async createLog(@Payload() createLog: CreateDailyLogDto) {
     return await this.attendenceService.createLog(createLog);
   }
-  @Get('get/:id/:Date')
-  async getLogById(@Param('id') id: number, @Param('Date') Date: Date) {
-    return await this.attendenceService.getLogById(id, Date);
+  @MessagePattern({ cmd: 'getLogById' })
+  async getLogById(@Payload() data: any) {
+    return await this.attendenceService.getLogById(data.id, data.Date);
   }
-  @Get('poc/:id')
-  async isPocverified(@Param('id') id: number) {
+  @MessagePattern({ cmd: 'isPocverified' })
+  async isPocverified(@Payload() id: number) {
     return await this.attendenceService.isPocverified(id);
   }
 }

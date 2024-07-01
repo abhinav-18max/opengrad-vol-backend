@@ -1,7 +1,9 @@
 import { FeedbackItemType } from './feedbackitem.entity';
 import { PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { FeedbackResponse } from './feedbackresponse.entity';
+import { Entity } from 'typeorm';
 
+@Entity({ name: 'FeedbackitemResponse' })
 export class FeedbackitemResponse {
   @PrimaryGeneratedColumn() id: number;
   @Column({ type: 'int' }) feedbackitem_id: number;
