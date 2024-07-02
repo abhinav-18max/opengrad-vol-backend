@@ -11,6 +11,6 @@ export class PocNotification {
   typeofnotification: PocNotificationType;
   @Column({ type: 'varchar', length: 25500, nullable: true }) Message: string;
   @Column({ type: 'int', nullable: true }) form_id: number;
-  @Column({ type: 'int', nullable: false })
-  receipient_id: number;
+  @Column({ type: 'int', nullable: false, array: true })
+  receipient_id: number[];
 }

@@ -25,6 +25,5 @@ export class CreateCohortNotificationDto {
 
   @IsNotEmpty()
   @IsArray()
-  @IsNumber()
   receipient_id: number[];
 }

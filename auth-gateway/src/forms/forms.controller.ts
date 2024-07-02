@@ -12,32 +12,10 @@ export class FormsController {
   createfeedBackForm(
     @Body() createFeedbackdto: CreateFeedbackDto,
   ): Observable<any> {
-    const res1 = this.natsClient.send(
+    return this.natsClient.send(
       { cmd: 'createFeedbackForm' },
       createFeedbackdto,
     );
-    res1.subscribe((res) => {
-      if (res?.receipientType === 'cohort') {
-        this.natsClient.send(
-          { cmd: 'createCohortNotification' },
-          {
-            typeofnotification: 'form',
-            form_id: res?.id,
-            recipient_id: res?.recipientId,
-          },
-        );
-      } else {
-        this.natsClient.send(
-          { cmd: 'createPocNotification' },
-          {
-            typeofnotification: 'form',
-            form_id: res?.id,
-            recipient_id: res?.recipientId,
-          },
-        );
-      }
-    });
-    return res1;
   }
   @Get('get/:id')
   getfeedBackForm(@Param('id') id: number): Observable<any> {

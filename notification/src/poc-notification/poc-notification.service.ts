@@ -15,16 +15,13 @@ export class PocNotificationService {
     createPocNotificationDto: CreatePocNotificationDto,
   ) {
     try {
-      for (let i = 0; i < createPocNotificationDto.receipient_id.length; i++) {
-        const pocNotification = new PocNotification();
-        pocNotification.form_id = createPocNotificationDto.form_id;
-        pocNotification.typeofnotification =
-          createPocNotificationDto.typeofnotification;
-        pocNotification.Message = createPocNotificationDto.Message;
-        pocNotification.receipient_id =
-          createPocNotificationDto.receipient_id[i];
-        await this.pocNotificationRepository.save(pocNotification);
-      }
+      const pocNotification = new PocNotification();
+      pocNotification.form_id = createPocNotificationDto.form_id;
+      pocNotification.typeofnotification =
+        createPocNotificationDto.typeofnotification;
+      pocNotification.Message = createPocNotificationDto.Message;
+      pocNotification.receipient_id = createPocNotificationDto.receipient_id;
+      await this.pocNotificationRepository.save(pocNotification);
     } catch (error) {
       console.log(error);
       return error;
@@ -32,11 +29,10 @@ export class PocNotificationService {
   }
   async searchPocNotification(id: number) {
     try {
-      const pocNotification = await this.pocNotificationRepository.find({
-        where: {
-          receipient_id: id,
-        },
-      });
+      const pocNotification = await this.pocNotificationRepository
+        .createQueryBuilder('poc')
+        .where(':id=ANY(poc.receipient_id)', { id: id })
+        .getMany();
       return pocNotification;
     } catch (error) {
       console.log(error);

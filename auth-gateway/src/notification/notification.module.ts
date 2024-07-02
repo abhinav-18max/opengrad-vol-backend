@@ -3,7 +3,7 @@ import { NotificationController } from './notification.controller';
 import { NatsClientModule } from 'src/nats-client/nats-client.module';
 
 @Module({
-  imports:[NatsClientModule],
-  controllers: [NotificationController]
+  imports: [NatsClientModule],
+  controllers: [NotificationController],
 })
 export class NotificationModule {}

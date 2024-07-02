@@ -15,20 +15,14 @@ export class CohortNotificationService {
     createCohortNotificationDto: CreateCohortNotificationDto,
   ) {
     try {
-      for (
-        let i = 0;
-        i < createCohortNotificationDto.receipient_id.length;
-        i++
-      ) {
-        const cohortNotification = new CohortNotification();
-        cohortNotification.form_id = createCohortNotificationDto.form_id;
-        cohortNotification.typeofnotification =
-          createCohortNotificationDto.typeofnotification;
-        cohortNotification.Message = cohortNotification.Message;
-        cohortNotification.receipient_id =
-          createCohortNotificationDto.receipient_id[i];
-        await this.cohortNotificationRepository.save(cohortNotification);
-      }
+      const cohortNotification = new CohortNotification();
+      cohortNotification.form_id = createCohortNotificationDto.form_id;
+      cohortNotification.typeofnotification =
+        createCohortNotificationDto.typeofnotification;
+      cohortNotification.Message = cohortNotification.Message;
+      cohortNotification.receipient_id =
+        createCohortNotificationDto.receipient_id;
+      await this.cohortNotificationRepository.save(cohortNotification);
     } catch (error) {
       console.log(error);
       return error;
@@ -36,12 +30,10 @@ export class CohortNotificationService {
   }
   async searchCohortNotification(id: number) {
     try {
-      const cohortNotification = await this.cohortNotificationRepository.find({
-        where: {
-          receipient_id: id,
-        },
-      });
-      return cohortNotification;
+      return await this.cohortNotificationRepository
+        .createQueryBuilder('cohort')
+        .where(':id=ANY(cohort.receipient_id)', { id: id })
+        .getMany();
     } catch (error) {
       console.log(error);
       return error;

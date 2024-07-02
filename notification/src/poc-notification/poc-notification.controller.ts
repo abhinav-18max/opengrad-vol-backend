@@ -15,7 +15,7 @@ export class PocNotificationController {
       createPocNotificationDto,
     );
   }
-  @MessagePattern({ cmd: 'getCohortNotification' })
+  @MessagePattern({ cmd: 'getPocNotification' })
   async search(@Payload() id: number) {
     return await this.pocnotificationservice.searchPocNotification(id);
   }
