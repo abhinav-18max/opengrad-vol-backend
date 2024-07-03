@@ -7,8 +7,8 @@ import {
   Inject,
   Param,
   Post,
-  Req,
   Res,
+  Req,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -17,6 +17,9 @@ import { InvitePocDto } from './dto/invite-poc.dto';
 import { InviteVolDto } from './dto/invite-vol.dto';
 import { MagicloginStrategy } from '../auth/passport/magiclogin.strategy';
 import { AssignVolDto } from './dto/assign-vol.dto';
+import { AuthUser } from '../utils/decorators/AuthUser.decorator';
+import { User } from './entities/user.entity';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -69,5 +72,10 @@ export class UserController {
   @Get('get/poc')
   getAllPoc() {
     return this.userService.getAllPoc();
+  }
+
+  @Get('volbyPoc/:id')
+  getVolByPoc(@Param('id') id: number) {
+    return this.userService.getVolbyPoc(id);
   }
 }

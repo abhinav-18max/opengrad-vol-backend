@@ -62,11 +62,11 @@ export class CohortService {
       .where('vol.id = :id', { id: id })
       .getMany();
   }
-  async getvolBycohort(id: number) {
-    return await this.volRelation
-      .createQueryBuilder('vol')
-      .leftJoinAndSelect('vol.cohorts', 'cohort')
-      .where('cohort.id = :id', { id: id })
-      .getOne();
+  async getvolsInCohort(id: number) {
+    return await this.cohortRepository
+      .createQueryBuilder('cohort')
+      .leftJoinAndSelect('cohort.vol', 'vol')
+      .where('cohort.id =:id', { id: id })
+      .getMany();
   }
 }

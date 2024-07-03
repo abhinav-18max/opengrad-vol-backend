@@ -26,8 +26,8 @@ export class CohortController {
     return await this.cohortService.findByVol(id);
   }
 
-  @Get('volBycohort/:id')
+  @Get('volByCohort/:id')
   async findVolByCohort(@Param('id') id: number) {
-    return await this.cohortService.getvolBycohort(id);
+    return await this.cohortService.getvolsInCohort(id);
   }
 }

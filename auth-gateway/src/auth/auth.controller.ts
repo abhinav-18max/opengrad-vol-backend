@@ -79,4 +79,10 @@ export class AuthController {
       return res;
     }
   }
+
+  @Get('volfuldata')
+  async getVolData(@Req() req: Request) {
+    const res = await this.userService.getVolfulldata(req.user);
+    return res;
+  }
 }

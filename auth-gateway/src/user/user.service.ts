@@ -71,7 +71,7 @@ export class UserService {
 
   async findOneByEmail(email: string) {
     return await this.userRepository.findOne({
-      select: ['email', 'password', 'name', 'role'],
+      select: ['id', 'email', 'password', 'name', 'role'],
       where: { email: email },
     });
   }
@@ -219,14 +219,18 @@ export class UserService {
       const res1 = await this.volRepository.findOne({
         where: { id: assignVolDto.volRelationId },
       });
+      const vols = [];
       const res2 = await this.cohortRepository.findOne({
         where: { id: assignVolDto.cohortId },
         relations: {
           vol: true,
         },
       });
-      console.log(res2);
-      res2.vol.push(res1);
+      vols.push(res1);
+      for (let i = 0; i < res2.vol.length; i++) {
+        vols.push(res2.vol[i]);
+      }
+      res2.vol = vols;
       return await this.cohortRepository.save(res2 as any);
     } catch (err) {
       console.log(err);
@@ -236,7 +240,54 @@ export class UserService {
 
   async getAllPoc() {
     try {
-      return await this.pocRepository.find();
+      return await this.pocRepository.find({
+        relations: {
+          user_id: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+  async getVolbyPoc(id: number) {
+    try {
+      return await this.volRepository
+        .createQueryBuilder('vol')
+        .leftJoinAndSelect('vol.poc', 'poc')
+        .leftJoinAndSelect('vol.user_id', 'user')
+        .where('poc.id=:id', { id: id })
+        .getMany();
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async getVolfulldata(user: any) {
+    try {
+      if (user.role === 'vol') {
+        const res = await this.volRepository
+          .createQueryBuilder('vol')
+          .leftJoinAndSelect('vol.user_id', 'user')
+          .leftJoinAndSelect('vol.poc', 'poc')
+          .where('user.id=:id', { id: user.id })
+          .getOne();
+
+        const res2 = await this.cohortRepository
+          .createQueryBuilder('cohort')
+          .leftJoinAndSelect('cohort.vol', 'vol')
+          .where('vol.id = :id', { id: res.id })
+          .getMany();
+
+        const response = {
+          Poc: res,
+          Cohorts: res2,
+        };
+        return response;
+      } else {
+        return user;
+      }
     } catch (err) {
       console.log(err);
       return err;

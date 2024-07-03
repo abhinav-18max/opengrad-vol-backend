@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class AssignVolDto {
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   cohortId: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   volRelationId: number;
 }
