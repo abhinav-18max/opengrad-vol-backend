@@ -1,3 +1,4 @@
+import { VolRelation } from './../user/entities/vol.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +11,7 @@ export class CohortService {
   constructor(
     @InjectRepository(Cohort) private cohortRepository: Repository<Cohort>,
     @InjectRepository(PocRelation) private pocRelation: Repository<PocRelation>,
+    @InjectRepository(VolRelation) private volRelation: Repository<VolRelation>,
   ) {}
 
   async create(createCohortDto: CreateCohortDto): Promise<Cohort> {
@@ -59,5 +61,12 @@ export class CohortService {
       .leftJoinAndSelect('cohort.vol', 'vol')
       .where('vol.id = :id', { id: id })
       .getMany();
+  }
+  async getvolBycohort(id: number) {
+    return await this.volRelation
+      .createQueryBuilder('vol')
+      .leftJoinAndSelect('vol.cohorts', 'cohort')
+      .where('cohort.id = :id', { id: id })
+      .getOne();
   }
 }

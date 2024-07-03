@@ -65,4 +65,9 @@ export class UserController {
   assignVol(@Body() assignVolDto: AssignVolDto) {
     return this.userService.assignVoltoCohort(assignVolDto);
   }
+
+  @Get('get/poc')
+  getAllPoc() {
+    return this.userService.getAllPoc();
+  }
 }

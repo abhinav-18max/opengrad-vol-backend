@@ -12,29 +12,23 @@ export class NotificationController {
   @Post('cohort/create')
   createcohortNotification(
     @Body() createcohortNotification: CreateCohortNotificationDto,
-  ): Observable<any> {
-    return this.natsClient.send(
-      { cmd: 'createCohortNotification' },
-      createcohortNotification,
-    );
+  ) {
+    this.natsClient.emit('createCohortNotification', createcohortNotification);
   }
 
   @Post('poc/create')
   createpocNotification(
     @Body() createpocNotification: CreatePocNotificationDto,
-  ): Observable<any> {
-    return this.natsClient.send(
-      { cmd: 'createPocNotification' },
-      createpocNotification,
-    );
+  ) {
+    this.natsClient.emit('createPocNotification', createpocNotification);
   }
 
   @Get('cohort/get/:id')
-  getcohortNotification(@Param() id: number): Observable<any> {
+  getcohortNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getCohortNotification' }, id);
   }
   @Get('poc/get/:id')
-  getpocNotification(@Param() id: number): Observable<any> {
+  getpocNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getPocNotification' }, id);
   }
 }

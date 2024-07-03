@@ -1,6 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { FormsService } from './forms.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateFeedbackDto } from './dto/createFeedback.dto';
 import { CreateFeedbackResponseDto } from './dto/createfeedbackresponse.dto';
 
@@ -9,6 +9,7 @@ export class FormsController {
   constructor(private readonly formsService: FormsService) {}
   @MessagePattern({ cmd: 'createFeedbackForm' })
   async createfeedBackForm(@Payload() createFeedbackdto: CreateFeedbackDto) {
+    console.log(createFeedbackdto);
     return await this.formsService.createfeedBackForm(createFeedbackdto);
   }
 

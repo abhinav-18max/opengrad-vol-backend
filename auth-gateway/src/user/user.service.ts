@@ -233,4 +233,13 @@ export class UserService {
       return err;
     }
   }
+
+  async getAllPoc() {
+    try {
+      return await this.pocRepository.find();
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }
