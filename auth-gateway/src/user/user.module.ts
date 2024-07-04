@@ -9,6 +9,9 @@ import { PocRelation } from './entities/poc.entity';
 import { VolRelation } from './entities/vol.entity';
 import { AuthModule } from '../auth/auth.module';
 import { Cohort } from '../cohort/entities/cohort.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { LocalStrategy } from 'src/auth/passport/local.strategy';
 
 @Global()
 @Module({
@@ -24,7 +27,14 @@ import { Cohort } from '../cohort/entities/cohort.entity';
     forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    LocalStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
   exports: [UserService],
 })
 export class UserModule {}

@@ -26,6 +26,6 @@ import { MagicloginStrategy } from './passport/magiclogin.strategy';
     MagicloginStrategy,
   ],
   controllers: [AuthController],
-  exports: [MagicloginStrategy],
+  exports: [MagicloginStrategy, LocalStrategy, AuthService],
 })
 export class AuthModule {}

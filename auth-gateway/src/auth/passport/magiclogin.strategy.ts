@@ -21,46 +21,43 @@ export class MagicloginStrategy extends PassportStrategy(Strategy) {
       callbackUrl: 'http://localhost:5001/auth/login/callback',
       sendMagicLink: async (destination, href) => {
         try {
-          if (!this.sesClient) {
-            this.sesClient = new SESClient({
-              region: process.env.AWS_REGION,
-              credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-              },
-            });
-            this.logger.log('SES client created');
-            const FrontendUrl = process.env.MAGIC_LINK_URL;
-            const token = await this.getTokenFromUrl(href);
-            const magicLink = await this.createNewLink(FrontendUrl, token);
+          this.sesClient = new SESClient({
+            region: process.env.AWS_REGION,
+            credentials: {
+              accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+              secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            },
+          });
+          this.logger.log('SES client created');
+          const FrontendUrl = process.env.MAGIC_LINK_URL;
+          const token = await this.getTokenFromUrl(href);
+          const magicLink = await this.createNewLink(FrontendUrl, token);
 
-            const params = {
-              Source: process.env.EMAIL,
-              Destination: {
-                ToAddresses: [destination],
+          const params = {
+            Source: process.env.EMAIL,
+            Destination: {
+              ToAddresses: [destination],
+            },
+            Message: {
+              Subject: {
+                Data: 'OpenGrad Account Password Setting',
+                Charset: 'UTF-8',
               },
-              Message: {
-                Subject: {
-                  Data: 'OpenGrad Account Password Setting',
+              Body: {
+                Text: {
+                  Data: `Click on the following link to log in ${magicLink}`,
                   Charset: 'UTF-8',
                 },
-                Body: {
-                  Text: {
-                    Data: `Click on the following link to log in ${magicLink}`,
-                    Charset: 'UTF-8',
-                  },
-                },
               },
-            };
+            },
+          };
 
-            const command = new SendEmailCommand(params);
-            await this.sesClient.send(command);
-            this.logger.log(`Sending magic link to ${destination}`);
-          } else {
-            this.logger.log('Error in sesClient');
-          }
+          const command = new SendEmailCommand(params);
+          await this.sesClient.send(command);
+          this.logger.log(`Sending magic link to ${destination}`);
         } catch (err) {
           this.logger.error(err);
+          console.log(err);
           return err;
         }
       },

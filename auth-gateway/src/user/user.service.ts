@@ -293,4 +293,18 @@ export class UserService {
       return err;
     }
   }
+  async updatePassword(email: string, password: PasswordSetDto) {
+    try {
+      const res = await this.userRepository.findOne({
+        where: { email: email },
+      });
+      const gensaalt = await bcrypt.genSalt(10);
+      const hashpass = await bcrypt.hash(password.password, gensaalt);
+      res.password = hashpass;
+      return await this.userRepository.save(res);
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }

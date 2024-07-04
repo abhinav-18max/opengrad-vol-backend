@@ -9,6 +9,7 @@ import {
   Post,
   Res,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -17,9 +18,9 @@ import { InvitePocDto } from './dto/invite-poc.dto';
 import { InviteVolDto } from './dto/invite-vol.dto';
 import { MagicloginStrategy } from '../auth/passport/magiclogin.strategy';
 import { AssignVolDto } from './dto/assign-vol.dto';
-import { AuthUser } from '../utils/decorators/AuthUser.decorator';
-import { User } from './entities/user.entity';
-import { Request } from 'express';
+import { Roles } from 'src/utils/decorators/Roles.decorator';
+import { Role } from 'src/utils/roles.enum';
+import { AuthenticatedGuard } from 'src/utils/guards/Authenticated.guard';
 
 @Controller('user')
 export class UserController {
@@ -55,6 +56,8 @@ export class UserController {
     return this.userService.remove(+id);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticatedGuard)
   @Post('pocinvite')
   createpocinvite(@Body() invitepocDto: InvitePocDto) {
     return this.userService.createPocInvite(invitepocDto);

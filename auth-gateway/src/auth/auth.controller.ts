@@ -77,9 +77,15 @@ export class AuthController {
         passwordSetDto,
       );
       return res;
+    } else {
+      return await this.userService.updatePassword(
+        req.uer.email,
+        passwordSetDto,
+      );
     }
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Get('volfuldata')
   async getVolData(@Req() req: Request) {
     const res = await this.userService.getVolfulldata(req.user);
