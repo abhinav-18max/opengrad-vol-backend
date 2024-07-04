@@ -296,8 +296,10 @@ export class UserService {
   async updatePassword(email: string, password: PasswordSetDto) {
     try {
       const res = await this.userRepository.findOne({
+        select: ['email', 'password', 'role', 'name', 'id'],
         where: { email: email },
       });
+      console.log(res);
       const gensaalt = await bcrypt.genSalt(10);
       const hashpass = await bcrypt.hash(password.password, gensaalt);
       res.password = hashpass;

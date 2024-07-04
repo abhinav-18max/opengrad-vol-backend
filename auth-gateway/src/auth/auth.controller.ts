@@ -55,6 +55,7 @@ export class AuthController {
   @Post('profileset')
   async Send(@Req() req: Request, @Res() res: Response) {
     const resp = await this.userService.checkEmail(req.body.destination);
+    console.log(resp);
     if (resp == null) {
       return res.status(230).json({ message: 'Email does not exist' });
     }
@@ -64,7 +65,6 @@ export class AuthController {
   @UseGuards(AuthGuard('magiclogin'))
   @Post('login/callback')
   async callback(@Req() req, @Body() passwordSetDto: PasswordSetDto) {
-    console.log(req.user);
     if (req.user.spec === 'invite-poc') {
       const res = await this.userService.createUserPoc(
         req.user.email,
@@ -77,11 +77,13 @@ export class AuthController {
         passwordSetDto,
       );
       return res;
-    } else {
-      return await this.userService.updatePassword(
-        req.uer.email,
+    } else if (req.user.spec === 'user') {
+      const res = await this.userService.updatePassword(
+        req.user.email,
         passwordSetDto,
       );
+      console.log(res);
+      return res;
     }
   }
 
