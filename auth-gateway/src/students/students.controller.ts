@@ -11,7 +11,7 @@ import { UseGuards } from '@nestjs/common';
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentService: StudentsService) {}
-  @Roles(Role.Poc)
+  @Roles(Role.Poc, Role.Admin)
   @UseGuards(AuthenticatedGuard)
   @Post('create')
   async createStudent(@Body() createStudentDto: CreateStudentDto) {
@@ -32,7 +32,7 @@ export class StudentsController {
     return await this.studentService.findAll();
   }
 
-  @Roles(Role.Admin || Role.Poc)
+  @Roles(Role.Admin, Role.Poc)
   @UseGuards(AuthenticatedGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -47,5 +47,12 @@ export class StudentsController {
       getStudentsDto.volId,
       getStudentsDto.cohortId,
     );
+  }
+
+  @Roles(Role.Admin, Role.Poc)
+  @UseGuards(AuthenticatedGuard)
+  @Get('getbyCohort/:id')
+  async findByCohort(@Param('id') id: number) {
+    return await this.studentService.findByChort(id);
   }
 }

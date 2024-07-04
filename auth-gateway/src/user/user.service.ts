@@ -307,4 +307,17 @@ export class UserService {
       return err;
     }
   }
+  async getVolData(id: number) {
+    try {
+      return await this.volRepository.findOne({
+        where: { id: id },
+        relations: {
+          user_id: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }

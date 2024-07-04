@@ -67,18 +67,31 @@ export class UserController {
     return this.userService.createVolInvite(invitevolDto);
   }
 
+  @Roles(Role.Admin, Role.Poc)
+  @UseGuards(AuthenticatedGuard)
   @Post('assignvol')
   assignVol(@Body() assignVolDto: AssignVolDto) {
     return this.userService.assignVoltoCohort(assignVolDto);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticatedGuard)
   @Get('get/poc')
   getAllPoc() {
     return this.userService.getAllPoc();
   }
 
+  @Roles(Role.Admin, Role.Poc)
+  @UseGuards(AuthenticatedGuard)
   @Get('volbyPoc/:id')
   getVolByPoc(@Param('id') id: number) {
     return this.userService.getVolbyPoc(id);
+  }
+
+  @Roles(Role.Admin, Role.Poc)
+  @UseGuards(AuthenticatedGuard)
+  @Get('volById/:id')
+  getVolfulldata(@Param('id') id: number) {
+    return this.userService.getVolData(id);
   }
 }

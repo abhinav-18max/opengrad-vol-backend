@@ -43,4 +43,11 @@ export class StudentsService {
       },
     });
   }
+  async findByChort(id: number) {
+    return await this.studentRepository.find({
+      where: {
+        cohortId: id,
+      },
+    });
+  }
 }
