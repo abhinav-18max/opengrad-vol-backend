@@ -82,7 +82,6 @@ export class AuthController {
         req.user.email,
         passwordSetDto,
       );
-      console.log(res);
       return res;
     }
   }
