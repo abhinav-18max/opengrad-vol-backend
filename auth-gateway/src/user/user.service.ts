@@ -320,4 +320,18 @@ export class UserService {
       return err;
     }
   }
+
+  async getPocData(id: number) {
+    try {
+      return await this.pocRepository.findOne({
+        where: { id: id },
+        relations: {
+          user_id: true,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }

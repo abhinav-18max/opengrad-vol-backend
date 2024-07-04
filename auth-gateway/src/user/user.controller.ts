@@ -94,4 +94,11 @@ export class UserController {
   getVolfulldata(@Param('id') id: number) {
     return this.userService.getVolData(id);
   }
+
+  @Roles(Role.Admin, Role.Poc)
+  @UseGuards(AuthenticatedGuard)
+  @Get('pocById/:id')
+  getPocData(@Param('id') id: number) {
+    return this.userService.getPocData(id);
+  }
 }
