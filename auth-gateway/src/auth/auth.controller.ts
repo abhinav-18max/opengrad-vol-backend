@@ -7,11 +7,12 @@ import {
   Post,
   Req,
   Res,
-  Session,
   UseGuards,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LocalGuard } from './guards/local.guard';
+import { JwtAuthGuard } from './guards/jwt.guard';
 import { AuthenticatedGuard } from './guards/Authenticated.guard';
 import { Request, Response } from 'express';
 import { Roles } from './decorators/Roles.decorator';
@@ -19,6 +20,7 @@ import { Role } from './roles.enum';
 import { MagicloginStrategy } from './passport/magiclogin.strategy';
 import { AuthGuard } from '@nestjs/passport';
 import { PasswordSetDto } from '../user/dto/passwordset.dto';
+import { RolesGuard } from './guards/roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -28,28 +30,25 @@ export class AuthController {
     private strategy: MagicloginStrategy,
   ) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Session() session: Record<string, any>, @Res() res: Response) {
-    console.log(session);
-
-    return res
-      .status(201)
-      .json({ message: 'User logged in', user: session.passport.user });
+  @UseGuards(LocalGuard)
+  async login(@Req() req: Request) {
+    return req.user;
   }
 
-  @UseGuards(AuthenticatedGuard) @Get('status') getStatus(
+  @UseGuards(JwtAuthGuard) @Get('status') getStatus(
     @Req() req: Request,
     @Res() res: Response,
   ) {
     console.log(req.user);
     res.send(req.user);
   }
-  @Roles(Role.Poc)
-  @UseGuards(AuthenticatedGuard)
+  // @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('profile')
-  getProfile() {
-    return 'profile';
+  @Roles(Role.Admin)
+  getProfile(@Req() req: Request, @Res() res: Response) {
+    return res.status(HttpStatus.OK).json(req.user);
   }
 
   @Post('profileset')

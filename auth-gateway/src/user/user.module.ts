@@ -12,6 +12,7 @@ import { Cohort } from '../cohort/entities/cohort.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { LocalStrategy } from 'src/auth/passport/local.strategy';
+import { JwtService } from '@nestjs/jwt';
 
 @Global()
 @Module({
@@ -24,10 +25,10 @@ import { LocalStrategy } from 'src/auth/passport/local.strategy';
       VolRelation,
       Cohort,
     ]),
-    forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
   providers: [
+    JwtService,
     UserService,
     LocalStrategy,
     {
