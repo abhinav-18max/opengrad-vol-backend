@@ -103,7 +103,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('pocById/:id')
-  @Roles(Role.Admin, Role.Poc)
+  @Roles(Role.Admin, Role.Poc, Role.Vol)
   getPocData(@Param('id') id: number) {
     return this.userService.getPocData(id);
   }

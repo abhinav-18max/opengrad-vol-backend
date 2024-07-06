@@ -36,14 +36,14 @@ export class StudentsController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
-  @Roles(Role.Admin, Role.Poc)
+  @Roles(Role.Admin, Role.Poc, Role.Vol)
   async findOne(@Param('id') id: string) {
     return await this.studentService.findOne(+id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('getAll')
-  @Roles(Role.Admin || Role.Poc)
+  @Roles(Role.Admin ,Role.Poc, Role.Vol)
   async findById(@Body() getStudentsDto: GetStudentsDto) {
     return await this.studentService.findByVolId(
       getStudentsDto.volId,
