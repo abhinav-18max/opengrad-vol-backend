@@ -11,23 +11,19 @@ async function bootstrap() {
   if (Appdatasource.isInitialized === false) await Appdatasource.initialize();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
-    origin: '*',
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: [
+      'Content-Type',
+      'Origin',
+      'X-Requested-With',
+      'Accept',
+      'Authorization',
+    ],
+    exposedHeaders: ['Authorization'],
     credentials: true,
   });
-  const sessionrepository = Appdatasource.getRepository(SessionEntity);
 
-  app.use(
-    session({
-      secret: 'my-secret',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 3600000 },
-      store: new TypeormStore().connect(sessionrepository),
-    }),
-  );
-
-  app.use(passport.initialize());
-  app.use(passport.session());
   await app.listen(5001, '0.0.0.0', () => {
     console.log('Auth Gateway is running on port 5001');
   });
