@@ -33,14 +33,14 @@ export class NotificationController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('cohort/get/:id')
-  @Roles(Role.Vol)
+  @Roles(Role.Vol, Role.Poc, Role.Admin)
   getcohortNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getCohortNotification' }, id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('poc/get/:id')
-  @Roles(Role.Vol)
+  @Roles(Role.Vol, Role.Poc, Role.Admin)
   getpocNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getPocNotification' }, id);
   }
