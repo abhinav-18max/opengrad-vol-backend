@@ -66,6 +66,7 @@ export class CohortService {
     return await this.cohortRepository
       .createQueryBuilder('cohort')
       .leftJoinAndSelect('cohort.vol', 'vol')
+      .leftJoinAndSelect('vol.user_id', 'user')
       .where('cohort.id =:id', { id: id })
       .getMany();
   }
