@@ -20,7 +20,8 @@ import { MagicloginStrategy } from '../auth/passport/magiclogin.strategy';
 import { AssignVolDto } from './dto/assign-vol.dto';
 import { Roles } from 'src/utils/decorators/Roles.decorator';
 import { Role } from 'src/utils/roles.enum';
-import { AuthenticatedGuard } from 'src/utils/guards/Authenticated.guard';
+import { JwtAuthGuard } from 'src/utils/guards/jwt.guard';
+import { RolesGuard } from 'src/utils/guards/roles.guard';
 
 @Controller('user')
 export class UserController {
@@ -40,11 +41,17 @@ export class UserController {
     }
   }
 
-  @Get() findAll() {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get()
+  @Roles(Role.Admin)
+  findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id') findOne(@Param('id') id: string) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get(':id')
+  @Roles(Role.Admin)
+  findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
 
@@ -55,49 +62,48 @@ export class UserController {
   @Delete(':id') remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
-
-  @Roles(Role.Admin)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('pocinvite')
+  @Roles(Role.Admin)
   createpocinvite(@Body() invitepocDto: InvitePocDto) {
     return this.userService.createPocInvite(invitepocDto);
   }
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('volinvite')
+  @Roles(Role.Admin, Role.Poc)
   createvolinvite(@Body() invitevolDto: InviteVolDto) {
     return this.userService.createVolInvite(invitevolDto);
   }
 
-  @Roles(Role.Admin, Role.Poc)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('assignvol')
+  @Roles(Role.Admin, Role.Poc)
   assignVol(@Body() assignVolDto: AssignVolDto) {
     return this.userService.assignVoltoCohort(assignVolDto);
   }
-
-  @Roles(Role.Admin)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('get/poc')
+  @Roles(Role.Admin)
   getAllPoc() {
     return this.userService.getAllPoc();
   }
-
-  @Roles(Role.Admin, Role.Poc)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('volbyPoc/:id')
+  @Roles(Role.Admin, Role.Poc)
   getVolByPoc(@Param('id') id: number) {
     return this.userService.getVolbyPoc(id);
   }
 
-  @Roles(Role.Admin, Role.Poc)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('volById/:id')
+  @Roles(Role.Admin, Role.Poc)
   getVolfulldata(@Param('id') id: number) {
     return this.userService.getVolData(id);
   }
 
-  @Roles(Role.Admin, Role.Poc)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('pocById/:id')
+  @Roles(Role.Admin, Role.Poc)
   getPocData(@Param('id') id: number) {
     return this.userService.getPocData(id);
   }

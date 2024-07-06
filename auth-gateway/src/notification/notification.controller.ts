@@ -6,40 +6,41 @@ import { CreateCohortNotificationDto } from './dto/createCohortNotification.dto'
 import { CreatePocNotificationDto } from './dto/createPocNotification.dto';
 import { Roles } from 'src/utils/decorators/Roles.decorator';
 import { Role } from 'src/utils/roles.enum';
-import { AuthenticatedGuard } from 'src/utils/guards/Authenticated.guard';
 import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/utils/guards/jwt.guard';
+import { RolesGuard } from 'src/utils/guards/roles.guard';
 
 @Controller('notification')
 export class NotificationController {
   constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
-
-  @Roles(Role.Admin)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('cohort/create')
+  @Roles(Role.Admin)
   createcohortNotification(
     @Body() createcohortNotification: CreateCohortNotificationDto,
   ) {
     this.natsClient.emit('createCohortNotification', createcohortNotification);
   }
-  @Roles(Role.Poc, Role.Admin)
-  @UseGuards(AuthenticatedGuard)
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('poc/create')
+  @Roles(Role.Poc, Role.Admin)
   createpocNotification(
     @Body() createpocNotification: CreatePocNotificationDto,
   ) {
     this.natsClient.emit('createPocNotification', createpocNotification);
   }
 
-  @Roles(Role.Vol)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('cohort/get/:id')
+  @Roles(Role.Vol)
   getcohortNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getCohortNotification' }, id);
   }
 
-  @Roles(Role.Vol)
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('poc/get/:id')
+  @Roles(Role.Vol)
   getpocNotification(@Param('id') id: number): Observable<any> {
     return this.natsClient.send({ cmd: 'getPocNotification' }, id);
   }

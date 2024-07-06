@@ -85,7 +85,7 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('volfuldata')
   async getVolData(@Req() req: Request) {
     const res = await this.userService.getVolfulldata(req.user);
