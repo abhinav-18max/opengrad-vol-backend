@@ -8,14 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [NatsClientModule],
-  providers: [
-    JwtService,
-    LocalStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [],
   controllers: [ActivityLogController],
 })
 export class ActivityLogModule {}

@@ -27,15 +27,7 @@ import { JwtService } from '@nestjs/jwt';
     ]),
   ],
   controllers: [UserController],
-  providers: [
-    JwtService,
-    UserService,
-    LocalStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [JwtService, UserService],
   exports: [UserService],
 })
 export class UserModule {}

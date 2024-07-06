@@ -8,13 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [NatsClientModule],
-  providers: [
-    LocalStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [],
   controllers: [FormsController],
 })
 export class FormsModule {}

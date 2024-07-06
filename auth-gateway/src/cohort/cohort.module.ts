@@ -12,15 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Cohort, PocRelation, VolRelation])],
-  providers: [
-    CohortService,
-
-    LocalStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [CohortService],
   controllers: [CohortController],
 })
 export class CohortModule {}

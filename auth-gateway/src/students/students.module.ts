@@ -10,14 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Student])],
-  providers: [
-    StudentsService,
-    LocalStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [StudentsService],
   controllers: [StudentsController],
 })
 export class StudentsModule {}
