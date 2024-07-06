@@ -10,9 +10,17 @@ import { Appdatasource } from './utils/appdatasource';
 async function bootstrap() {
   if (Appdatasource.isInitialized === false) await Appdatasource.initialize();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  //   app.enableCors(
+  //     {
+  //     // origin: 'http://localhost:3000',
+  //     origin: true,
+  //     credentials: true,
+  //   }
+  // );
   app.enableCors({
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+<<<<<<< HEAD
     allowedHeaders: [
       'Content-Type',
       'Origin',
@@ -20,6 +28,9 @@ async function bootstrap() {
       'Accept',
       'Authorization',
     ],
+=======
+    allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'Authorization'],
+>>>>>>> ff883ce (Some change)
     exposedHeaders: ['Authorization'],
     credentials: true,
   });
