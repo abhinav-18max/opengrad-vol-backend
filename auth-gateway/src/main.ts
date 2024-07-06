@@ -20,7 +20,6 @@ async function bootstrap() {
   app.enableCors({
     origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-<<<<<<< HEAD
     allowedHeaders: [
       'Content-Type',
       'Origin',
@@ -28,9 +27,6 @@ async function bootstrap() {
       'Accept',
       'Authorization',
     ],
-=======
-    allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'Authorization'],
->>>>>>> ff883ce (Some change)
     exposedHeaders: ['Authorization'],
     credentials: true,
   });
