@@ -13,6 +13,7 @@ import {
 import { UserService } from '../user/user.service';
 import { LocalGuard } from './guards/local.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { AuthenticatedGuard } from './guards/Authenticated.guard';
 import { Request, Response } from 'express';
 import { Roles } from './decorators/Roles.decorator';
 import { Role } from './roles.enum';

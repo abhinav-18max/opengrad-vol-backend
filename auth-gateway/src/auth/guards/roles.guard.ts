@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as jwt from 'jsonwebtoken';
+import { ROLES_KEY } from '../decorators/Roles.decorator';
+import { Role } from '../roles.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -16,8 +18,12 @@ export class RolesGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.get<string[]>('roles', context.getHandler());
-    if (!roles) {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    console.log(requiredRoles);
+    if (!requiredRoles) {
       return true;
     }
 
@@ -32,9 +38,7 @@ export class RolesGuard implements CanActivate {
     const token = bearerToken.split(' ')[1];
     const decoded = jwt.decode(token);
     request.user = decoded;
-    console.log(decoded);
-    console.log(request.user);
     const user = request.user;
-    return this.matchRoles(roles, user.role);
+    return this.matchRoles(requiredRoles, user.role);
   }
 }

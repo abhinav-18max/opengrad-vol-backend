@@ -336,4 +336,29 @@ export class UserService {
       return err;
     }
   }
+
+  async getfulldata(user: any) {
+    try {
+      if (user.role === 'vol') {
+        return await this.volRepository
+          .createQueryBuilder('vol')
+          .leftJoinAndSelect('vol.user_id', 'user')
+          .where('user.id =:id', { id: user.id })
+          .getOne();
+      }
+      if (user.role === 'poc') {
+        return await this.pocRepository
+          .createQueryBuilder('poc')
+          .leftJoinAndSelect('poc.user_id', 'user')
+          .where('user.id =:id', { id: user.id })
+          .getOne();
+      }
+      return await this.userRepository.findOne({
+        where: { id: user.id },
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }
