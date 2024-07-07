@@ -36,7 +36,7 @@ jobs:
         id: build-authgateway
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }}
           REPOSITORY: auth-gateway
         run: |
           # Build a docker container and
@@ -50,7 +50,7 @@ jobs:
         id: build-activity-log
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }}
           REPOSITORY: activity-log
         run: |
           # Build a docker container and
@@ -64,7 +64,7 @@ jobs:
         id: build-forms
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }}
           REPOSITORY: forms
         run: |
           # Build a docker container and
@@ -78,7 +78,7 @@ jobs:
         id: build-notification
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }}
           REPOSITORY: notification
         run: |
           # Build a docker container and
