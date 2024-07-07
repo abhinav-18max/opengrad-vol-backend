@@ -14,44 +14,30 @@ on:
     branches:
       - main
 
-env:
-  AWS_REGION: MY_AWS_REGION # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: MY_ECR_REPOSITORY # set this to your Amazon ECR repository name
-  ECS_SERVICE: MY_ECS_SERVICE # set this to your Amazon ECS service name
-  ECS_CLUSTER: MY_ECS_CLUSTER # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION:
-    MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-    # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME:
-    MY_CONTAINER_NAME # set this to the name of the container in the
-    # containerDefinitions section of your task definition
-
 jobs:
-  deploy:
-    name: Deploy
+  build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: "ap-south-1"
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
+      - name: Build, tag, and push Auth-Gateway to Amazon ECR
+        id: build-authgateway
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
+          REPOSITORY: auth-gateway
         run: |
           # Build a docker container and
           # push it to ECR so that it can
@@ -60,18 +46,100 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+      - name: Build, tag, and push Activity-Log to Amazon ECR
+        id: build-activity-log
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: activity-log
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push Forms to Amazon ECR
+        id: build-forms
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: forms
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push Notification to Amazon ECR
+        id: build-notification
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+          REPOSITORY: notification
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Fill in the new image ID for Auth-Gatewway in the Amazon ECS task definition
+        id: task-def-auth-gateway
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+          container-name: "auth-gateway"
+          image: ${{ steps.build-authgateway.outputs.image }}
+
+      - name: Fill in the new image ID for Activity-Log in the Amazon ECS task definition
+        id: task-def-activity-log
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-auth-gateway.outputs.task-definition }}
+          container-name: "activity-log"
+          image: ${{ steps.build-activity-log.outputs.image }}
+
+      - name: Fill in the new image ID for Forms in the Amazon ECS task definition
+        id: task-def-forms
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-activity-log.outputs.task-definition }}
+          container-name: "forms"
+          image: ${{ steps.build-forms.outputs.image }}
+
+      - name: Fill in the new image ID for Notifications in the Amazon ECS task definition
+        id: task-def-notifications
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-forms.outputs.task-definition }}
+          container-name: "notification"
+          image: ${{ steps.build-notification.outputs.image }}
+
+      - name: Fill in the new image ID for NATS in the Amazon ECS task definition
+        id: task-def-nats
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-notifications.outputs.task-definition }}
+          container-name: "nats"
+          image: "nats:latest"
+
+      - name: Fill in the new image ID for Postgres in the Amazon ECS task definition
+        id: task-def-postgres
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def-nats.outputs.task-definition }}
+          container-name: "postgres"
+          image: "postgres:latest"
 
       - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.task-def-postgres.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
