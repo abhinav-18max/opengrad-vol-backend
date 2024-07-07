@@ -15,7 +15,7 @@ export class NotificationController {
   constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('cohort/create')
-  @Roles(Role.Admin)
+  @Roles(Role.Admin, Role.Poc)
   createcohortNotification(
     @Body() createcohortNotification: CreateCohortNotificationDto,
   ) {

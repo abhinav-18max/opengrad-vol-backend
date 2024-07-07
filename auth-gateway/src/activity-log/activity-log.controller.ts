@@ -14,14 +14,14 @@ export class ActivityLogController {
   constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('create')
-  @Roles(Role.Admin)
+  @Roles(Role.Vol)
   createLog(@Body() createLog: CreateDailyLogDto): Observable<any> {
     return this.natsClient.send({ cmd: 'createLog' }, createLog);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('get/:id/:Date')
-  @Roles(Role.Admin, Role.Poc)
+  @Roles(Role.Admin, Role.Poc, Role.Vol)
   getLogById(
     @Param('id') id: number,
     @Param('Date') Date: Date,
