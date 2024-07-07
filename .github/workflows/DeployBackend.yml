@@ -14,7 +14,29 @@ on:
     branches:
       - main
 
+env:
+  ECS_TASK_DEFINITION: ${{ secrets.ECS_TASK_DEFINITION }}
+
 jobs:
+  secrets:
+    name: Accessing JSON secret
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Envs Before
+        run: echo "Env values before"
+
+      - name: Decode Secrets
+        run: |
+          if [ ! -x "$(command -v jq)" ]; then
+            echo "jq not found, installing..."
+            sudo apt-get update
+            sudo apt-get install -y jq
+          fi
+          echo "${{ env.ECS_TASK_DEFINITION }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+
+      - name: Envs After
+        run: echo "Env values after"
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -92,7 +114,7 @@ jobs:
         id: task-def-auth-gateway
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: "auth-gateway"
           image: ${{ steps.build-authgateway.outputs.image }}
 
