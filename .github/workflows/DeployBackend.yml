@@ -42,9 +42,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Build, tag, and push Activity-Log to Amazon ECR
         id: build-activity-log
@@ -56,9 +56,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Build, tag, and push Forms to Amazon ECR
         id: build-forms
@@ -70,9 +70,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Build, tag, and push Notification to Amazon ECR
         id: build-notification
@@ -84,15 +84,15 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID for Auth-Gatewway in the Amazon ECS task definition
         id: task-def-auth-gateway
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
           container-name: "auth-gateway"
           image: ${{ steps.build-authgateway.outputs.image }}
 
