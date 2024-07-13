@@ -4,8 +4,6 @@ services:
     command: pnpm run start:prod
     ports:
       - "5001:5001"
-    depends_on:
-      - postgres
     env_file:
       - .env
     networks:
@@ -22,8 +20,6 @@ services:
   activity-log:
     build: activity-log
     command: pnpm run start:prod
-    depends_on:
-      - postgres
     env_file:
       - .env
     networks:
@@ -36,12 +32,10 @@ services:
           ignore:
             - ./activitylog/node_modules/
         - action: rebuild
-          path: ./activitylog/package.json   
+          path: ./activitylog/package.json
   forms:
     build: forms
     command: pnpm run start:prod
-    depends_on:
-      - postgres
     env_file:
       - .env
     networks:
@@ -58,8 +52,6 @@ services:
   notification:
     build: notification
     command: pnpm run start:prod
-    depends_on:
-      - postgres
     env_file:
       - .env
     networks:
@@ -79,18 +71,7 @@ services:
       - "4222:4222"
     networks:
       - opengrad
-  postgres:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    networks:
-      - opengrad
-    environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
 
 networks:
   opengrad:
     driver: bridge
-

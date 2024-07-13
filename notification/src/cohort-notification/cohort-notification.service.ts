@@ -19,7 +19,7 @@ export class CohortNotificationService {
       cohortNotification.form_id = createCohortNotificationDto.form_id;
       cohortNotification.typeofnotification =
         createCohortNotificationDto.typeofnotification;
-      cohortNotification.Message = cohortNotification.Message;
+      cohortNotification.Message = createCohortNotificationDto.Message;
       cohortNotification.receipient_id =
         createCohortNotificationDto.receipient_id;
       await this.cohortNotificationRepository.save(cohortNotification);
