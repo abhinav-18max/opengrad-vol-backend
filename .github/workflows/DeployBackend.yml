@@ -30,28 +30,28 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME}}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push Auth-gateway
         uses: docker/build-push-action@v5
         with:
           context: ./auth-gateway
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/auth-gateway:latest
 
-      - name: Build and push Docker image
+      - name: Build and push Activity-log
         uses: docker/build-push-action@v5
         with:
           context: ./activity-log
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/activity-log:latest
 
-      - name: Build and push Docker image
+      - name: Build and push Forms
         uses: docker/build-push-action@v5
         with:
           context: ./forms
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/forms:latest
 
-      - name: Build and push Docker image
+      - name: Build and push Notification
         uses: docker/build-push-action@v5
         with:
           context: ./notification
