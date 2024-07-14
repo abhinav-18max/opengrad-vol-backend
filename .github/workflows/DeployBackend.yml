@@ -92,7 +92,7 @@ jobs:
       - name: Check instance state
         id: check_instance
         run: |
-          instance_state=$(aws ec2 describe-instances --instance-ids ${{ secrets.AWS_EC2_INSTANCE_ID }} --query 'Reservations[0].Instances[0].State.Name' --output text)
+          instance_state=$(aws ec2 describe-instances --instance-ids i-063625c60a2ddaf3b --query 'Reservations[0].Instances[0].State.Name' --output text)
           if [ "$instance_state" != "running" ]; then
             echo "Instance is not in running state: $instance_state"
             exit 1
@@ -102,7 +102,7 @@ jobs:
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=instanceIds,Values=${{ secrets.AWS_EC2_INSTANCE_ID }}" \
+            --targets "Key=instanceIds,Values=i-063625c60a2ddaf3b" \
             --parameters 'commands=["docker pull ${{steps.build-authgateway.outputs.image}}", "docker pull ${{ steps.build-activity-log.outputs.image}}", "docker pull ${{steps.build-forms.outputs.image}}","docker pull ${{steps.build-notification.outputs.image}}","docker pull nats:latest","docker-compose -f ./deploy/docker-compose.yml up"]' \
             --timeout-seconds 600 \
             --max-concurrency "50" \
