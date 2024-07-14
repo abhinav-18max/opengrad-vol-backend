@@ -88,6 +88,16 @@ jobs:
           docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f ./notification/Dockerfile  ./notification
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Check instance state
+        id: check_instance
+        run: |
+          instance_state=$(aws ec2 describe-instances --instance-ids ${{ secrets.AWS_EC2_INSTANCE_ID }} --query 'Reservations[0].Instances[0].State.Name' --output text)
+          if [ "$instance_state" != "running" ]; then
+            echo "Instance is not in running state: $instance_state"
+            exit 1
+          fi
+
       - name: Deploy to EC2
         run: |
           aws ssm send-command \
