@@ -46,7 +46,7 @@ export class MagicloginStrategy extends PassportStrategy(Strategy) {
               Body: {
                 Text: {
                   Data: `Hii,
-                            We are thrilled to welcome you to the OpenGrad family!
+                            We are thrilled to welcome you to the OpenGrad!
 
                             To get started, please set up your password by following the instructions below:
 
