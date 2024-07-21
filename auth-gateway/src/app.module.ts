@@ -13,6 +13,8 @@ import { ActivityLogModule } from './activity-log/activity-log.module';
 import { FormsModule } from './forms/forms.module';
 import { NotificationModule } from './notification/notification.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AppService } from './app.service';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
         expiresIn: '1d',
       },
     }),
+    TypeOrmModule.forFeature([User]),
     NatsClientModule,
     AuthModule,
     UserModule,
@@ -38,7 +41,7 @@ import { JwtModule } from '@nestjs/jwt';
     NotificationModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private Appdatasource: DataSource) {}

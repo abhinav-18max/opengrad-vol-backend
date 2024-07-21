@@ -40,12 +40,31 @@ export class MagicloginStrategy extends PassportStrategy(Strategy) {
             },
             Message: {
               Subject: {
-                Data: 'OpenGrad Account Password Setting',
+                Data: ' Welcome to OpenGrad! Set Up Your Password Today',
                 Charset: 'UTF-8',
               },
               Body: {
                 Text: {
-                  Data: `Click on the following link to log in ${magicLink}`,
+                  Data: `Hii,
+                            We are thrilled to welcome you to the OpenGrad family!
+
+                            To get started, please set up your password by following the instructions below:
+
+                            1. Visit the Password Setup Page: ${magicLink}
+
+                            2. Create a New Password: Choose a strong password that you will easily remember. Your password should be at least 8 characters long and include a mix of upper and lower case letters, numbers, and special characters.
+                           
+                            3. Confirm Your New Password: Re-enter your new password to ensure it matches.
+
+                            Please note that this email address ${destination} will be your login email for OpenGrad.
+                          
+                            Please note that this is an auto-generated email, and replies to this email will not be monitored.
+
+                            We look forward to collaborating with you and achieving great things together.
+
+                            Best regards,
+
+                            OpenGrad Team`,
                   Charset: 'UTF-8',
                 },
               },

@@ -1,3 +1,4 @@
+import { EditDto } from './dto/Edit.dto';
 import {
   Body,
   Controller,
@@ -9,6 +10,7 @@ import {
   Post,
   Res,
   Req,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
@@ -106,5 +108,11 @@ export class UserController {
   @Roles(Role.Admin, Role.Poc, Role.Vol)
   getPocData(@Param('id') id: number) {
     return this.userService.getPocData(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('editName')
+  editName(@Req() req: Request, @Body() edit: EditDto) {
+    return this.userService.editName(req.user, edit);
   }
 }

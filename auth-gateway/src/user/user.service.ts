@@ -14,6 +14,7 @@ import { PocRelation } from './entities/poc.entity';
 import { VolRelation } from './entities/vol.entity';
 import { Cohort } from '../cohort/entities/cohort.entity';
 import { AssignVolDto } from './dto/assign-vol.dto';
+import { EditDto } from './dto/Edit.dto';
 
 @Injectable()
 export class UserService {
@@ -356,6 +357,19 @@ export class UserService {
       return await this.userRepository.findOne({
         where: { id: user.id },
       });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async editName(user: any, edit: EditDto) {
+    try {
+      const res = await this.userRepository.findOne({
+        where: { id: user.id },
+      });
+      res.name = edit.name;
+      return await this.userRepository.save(res);
     } catch (err) {
       console.log(err);
       return err;
