@@ -37,7 +37,7 @@ export class AttendenceService {
     }
   }
   async getLogById(id: number, Date: Date) {
-    return await this.dailyLogRepository.findOne({
+    const response = await this.dailyLogRepository.findOne({
       where: {
         vol_id: id,
         Date: Date,
@@ -46,6 +46,8 @@ export class AttendenceService {
         Logs: true,
       },
     });
+    if (!response) return [];
+    return response;
   }
   async isPocverified(id: number) {
     const log = await this.dailyLogRepository.findOne({
