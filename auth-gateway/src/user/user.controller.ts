@@ -78,6 +78,26 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('get/pocinvites')
+  @Roles(Role.Admin)
+  getpocinvites() {
+    return this.userService.getPocInvites();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('get/volinvites/:pocId')
+  @Roles(Role.Admin, Role.Poc)
+  getvolinvites(@Param('pocId') pocId: number) {
+    return this.userService.getVolInvites(pocId);
+  }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('get/pocvolinvites')
+  @Roles(Role.Admin, Role.Poc)
+  getPocVolInvites(@Req() req: Request) {
+    return this.userService.getPocVolInvites(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('assignvol')
   @Roles(Role.Admin, Role.Poc)
   assignVol(@Body() assignVolDto: AssignVolDto) {
