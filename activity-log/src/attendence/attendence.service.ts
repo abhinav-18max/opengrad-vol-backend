@@ -46,7 +46,7 @@ export class AttendenceService {
         Logs: true,
       },
     });
-    if (!response) return [];
+    if (!response) return {};
     return response;
   }
   async isPocverified(id: number) {

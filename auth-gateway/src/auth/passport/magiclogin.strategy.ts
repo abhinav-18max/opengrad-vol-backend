@@ -16,7 +16,7 @@ export class MagicloginStrategy extends PassportStrategy(Strategy) {
     super({
       secret: process.env.MAGIC_SECRET,
       jwtOptions: {
-        expiresIn: '1 day',
+        expiresIn: '2 day',
       },
       callbackUrl: 'http://localhost:5001/auth/login/callback',
       sendMagicLink: async (destination, href) => {
@@ -57,6 +57,11 @@ export class MagicloginStrategy extends PassportStrategy(Strategy) {
                             3. Confirm Your New Password: Re-enter your new password to ensure it matches.
 
                             Please note that this email address ${destination} will be your login email for OpenGrad.
+
+                            
+                            Please use the following link within 24 hours to reset your password.
+                            If you encounter any issues with the link or if you exceed the time limit,
+                            please reach out to us for assistance.
                           
                             Please note that this is an auto-generated email, and replies to this email will not be monitored.
 

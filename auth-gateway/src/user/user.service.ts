@@ -375,4 +375,38 @@ export class UserService {
       return err;
     }
   }
+
+  async getPocInvites() {
+    try {
+      return await this.invitePocRepository.find();
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async getVolInvites(pocId: number) {
+    try {
+      return await this.inviteVolRepository.find({ where: { Poc: pocId } });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
+  async getPocVolInvites(user: any) {
+    try {
+      const partner = await this.pocRepository
+        .createQueryBuilder('poc')
+        .leftJoinAndSelect('poc.user_id', 'user')
+        .where('user.id =:id', { id: user.id })
+        .getOne();
+      return await this.inviteVolRepository.find({
+        where: { Poc: partner.id },
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
 }
